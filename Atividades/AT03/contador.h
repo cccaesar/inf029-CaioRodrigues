@@ -1,0 +1,1 @@
+void contarAntecessoresNaturais(int n);
