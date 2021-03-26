@@ -1,6 +1,7 @@
 #include <stdio.h>
 #define TAM 5
 #define TAM_NOME 20
+#define TAM_CPF 12
 
 typedef struct{
 	int ano;
@@ -8,19 +9,23 @@ typedef struct{
 	int dia;
 } dma;
 
+typedef struct{
+	
+} disciplina;
+
 typedef struct {
 	int matricula;
 	char nome[TAM_NOME];
 	char sexo;
 	char cpf[12];
 	dma data_nascimento;
-} dados_aluno;
+} pessoa_dados;
 
-void mostrarAluno(dados_aluno aluno);
-void inserirAluno( int qtd_alunos, dados_aluno lista[] );
+void mostrarAluno(pessoa_dados aluno);
+void inserirAluno( int qtd_alunos, pessoa_dados lista[] );
 void removerEnter( char palavra[], int tam );
 
-void mostrarAluno(dados_aluno aluno){
+void mostrarAluno(pessoa_dados aluno){
 	printf("-----\n");
 	printf("Matricula: %d\n", aluno.matricula);
 	printf("Nome do aluno: %s\n", aluno.nome);
@@ -45,8 +50,8 @@ void mostrarAluno(dados_aluno aluno){
 	printf("-----\n");
 }
 
-void inserirAluno( int qtd_alunos, dados_aluno lista[] ){
-	dados_aluno aluno;
+void inserirAluno( int qtd_alunos, pessoa_dados lista[] ){
+	pessoa_dados aluno;
 	printf("Insira o numero de matricula do aluno:\n");
 	scanf("%d",&aluno.matricula);
 	getchar();
@@ -57,8 +62,8 @@ void inserirAluno( int qtd_alunos, dados_aluno lista[] ){
 	aluno.sexo = getchar();
 	getchar();
 	printf("Insira os numeros do CPF do aluno:\n");
-	fgets(aluno.cpf, 12, stdin);
-	getchar();
+	fgets(aluno.cpf, TAM_CPF, stdin);
+	removerEnter(aluno.cpf , TAM_CPF);
 	printf("Insira ano, mes e dia de nascimento do aluno, respectivamente\n");
 	scanf("%d%d%d",&aluno.data_nascimento.ano,&aluno.data_nascimento.mes,&aluno.data_nascimento.dia);
 	lista[qtd_alunos++] = aluno;
@@ -67,7 +72,7 @@ void inserirAluno( int qtd_alunos, dados_aluno lista[] ){
 int main()
 {
 	
-	dados_aluno aluno, lista_alunos[TAM];
+	pessoa_dados aluno, lista_alunos[TAM];
 	int opcao = 1, i, qtd_alunos = 0;
 	
 	while(opcao){
