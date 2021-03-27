@@ -39,7 +39,7 @@ int main()
 			}
 			case 2:{
 				printf("Abrindo o menu de professores\n");
-				qtd_professores = menu_alunos( lista_professores, qtd_professores );
+				qtd_professores = menu_prof( lista_professores, qtd_professores );
 				break;
 			}
 		}
