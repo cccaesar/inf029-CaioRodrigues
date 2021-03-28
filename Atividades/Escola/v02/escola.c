@@ -1,28 +1,21 @@
 #include <stdio.h>
-#include "pessoaFuncoes.h"
+#include "escolaFuncoes.h"
 #define TAM 5
 #define TAM_NOME 20
 #define TAM_CPF 12
 #define MAX_DISCIPLINAS 2
 
-typedef struct{
-	char nome[TAM_NOME];
-	int semestre;
-	int codigo;
-	int Matricula_professor;
-	pessoa_dados alunos[TAM];
-} disciplina;
-
 int menu_alunos( pessoa_dados lista_alunos[], int qtd_alunos );
 void removerEnter( char palavra[], int tam );
 int menu_prof( pessoa_dados lista_prof[], int qtd_prof );
+int menu_disciplinas( disciplina lista_disciplinas[], int qtd_disciplinas );
 
 int main()
 {
 	
 	pessoa_dados lista_professores[TAM], lista_alunos[TAM];
 	disciplina lista_disciplinas[MAX_DISCIPLINAS];
-	int opcao = 1, i, qtd_alunos = 0, qtd_professores = 0;
+	int opcao = 1, i, qtd_alunos = 0, qtd_professores = 0, qtd_disciplinas = 0;
 	
 	while(opcao){
 		printf("Digite sua opção:\n");
@@ -41,6 +34,14 @@ int main()
 				printf("Abrindo o menu de professores\n");
 				qtd_professores = menu_prof( lista_professores, qtd_professores );
 				break;
+			}
+			case 3:{
+				printf("Abrindo o menu de disciplinas\n");
+				qtd_disciplinas = menu_disciplinas( lista_disciplinas, qtd_disciplinas );
+				break;
+			}
+			default:{
+				printf("Comando não reconhecido. Tente de novo\n");
 			}
 		}
 	}
@@ -64,14 +65,40 @@ int menu_alunos( pessoa_dados lista_alunos[], int qtd_alunos )
 				break;
 			}
 			case 2:{
-				
-				inserirConta( lista_alunos , qtd_alunos, 0 );
-				qtd_alunos++;
+				lista_alunos[qtd_alunos++] = inserirConta( 0 );
 				break;
 			}
 		}
 	}
 	return qtd_alunos;
+}
+
+int menu_disciplinas( disciplina lista_disciplinas[], int qtd_disciplinas )
+{
+	int opcao = 1, i;
+	
+	while(opcao){
+		printf("Digite sua opção:\n");
+		printf("0 - Sair\n");
+		printf("1 - Listar disciplinas\n");
+		printf("2 - Inserir novas disciplinas\n");
+		printf("3 - Remover aluno da disciplina\n");
+		printf("4 - Remover aluno da disciplina\n");
+		scanf("%d",&opcao);
+		switch(opcao){
+			case 1:{
+				for(i=0; i< qtd_disciplinas; i++){
+					mostrarDisciplina(lista_disciplinas[i]);
+				}
+				break;
+			}
+			case 2:{
+				lista_disciplinas[qtd_disciplinas++] = inserirDisciplina();
+				break;
+			}
+		}
+	}
+	return qtd_disciplinas;
 }
 
 int menu_prof( pessoa_dados lista_prof[], int qtd_prof )
@@ -92,9 +119,7 @@ int menu_prof( pessoa_dados lista_prof[], int qtd_prof )
 				break;
 			}
 			case 2:{
-				
-				inserirConta( lista_prof , qtd_prof, 1 );
-				qtd_prof++;
+				 lista_prof[qtd_prof++] = inserirConta( 1 );
 				break;
 			}
 		}

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #define TAM_NOME 20
 #define TAM_CPF 12
+#define TAM 5
 
 void removerEnter( char palavra[], int tam ){
 	int i;
@@ -26,9 +27,17 @@ typedef struct {
 	dma data_nascimento;
 } pessoa_dados;
 
+typedef struct{
+	char nome[TAM_NOME];
+	int semestre;
+	int codigo;
+	int matricula_professor;
+	pessoa_dados alunos[TAM];
+} disciplina;
 
-void inserirConta( pessoa_dados lista[], int n, int professor ){
+pessoa_dados inserirConta( int professor ){
 	pessoa_dados conta;
+	conta.professor = professor;
 	printf("Insira o numero de matricula:\n");
 	scanf("%d",&conta.matricula);
 	getchar();
@@ -43,8 +52,31 @@ void inserirConta( pessoa_dados lista[], int n, int professor ){
 	removerEnter(conta.cpf , TAM_CPF);
 	printf("Insira ano, mes e dia de nascimento, respectivamente\n");
 	scanf("%d%d%d",&conta.data_nascimento.ano,&conta.data_nascimento.mes,&conta.data_nascimento.dia);
-	conta.professor = professor;
-	lista[n++] = conta;
+	return conta;
+}
+
+disciplina inserirDisciplina(){
+	disciplina materia;
+	printf("Insira o codigo da disciplina:\n");
+	scanf("%d",&materia.codigo);
+	getchar();
+	printf("Insira o nome da disciplina:\n");
+	fgets(materia.nome, TAM_NOME, stdin);
+	removerEnter(materia.nome , TAM_NOME);
+	printf("Insira o semestre da materia:\n");
+	scanf("%d", &materia.semestre);
+	printf("Insira o numero de matricula do professor:\n");
+	scanf("%d",&materia.matricula_professor);
+	return materia;
+}
+
+void mostrarDisciplina(disciplina materia){
+	printf("-----\n");
+	printf("Nome da materia: %s\n", materia.nome);
+	printf("Codigo: %d\n", materia.codigo);
+	printf("Matricula do Professor: %d\n", materia.matricula_professor);
+	printf("Semestre: %d\n", materia.semestre);
+	printf("-----\n");
 }
 
 void mostrarPerfil(pessoa_dados conta){
