@@ -1,5 +1,6 @@
 #define TAM_NOME 20
-#define TAM_CPF 12
+#define TAM_CPF 13
+#define TAM_ALUNO 50
 #define TAM 5
 
 typedef struct{
@@ -19,10 +20,10 @@ typedef struct {
 
 typedef struct{
 	char nome[TAM_NOME];
-	int semestre;
+	char semestre[8];
 	int codigo;
 	int matricula_professor;
-	pessoa_dados alunos[TAM];
+	int matricula_alunos[TAM_ALUNO];
 } disciplina;
 
 disciplina inserirDisciplina();
