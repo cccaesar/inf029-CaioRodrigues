@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "validacao.h"
 #define TAM_NOME 20
 #define TAM_CPF 13
 #define TAM_ALUNO 50
@@ -42,24 +43,29 @@ int alunoJaCadastrado(int matricula, disciplina materia);
 void mostrarPerfil(pessoa_dados conta);
 disciplina adicionarAluno( disciplina materia, pessoa_dados aluno);
 
-pessoa_dados inserirConta( int professor ){
-	pessoa_dados conta;
-	conta.professor = professor;
+int inserirConta( pessoa_dados lista[], int qtd ,int professor ){
+	int validoData;
+	lista[qtd].professor = professor;
 	printf("Insira o numero de matricula:\n");
-	scanf("%d",&conta.matricula);
+	scanf("%d",&lista[qtd].matricula);
 	getchar();
 	printf("Insira o nome:\n");
-	fgets(conta.nome, TAM_NOME, stdin);
-	removerEnter(conta.nome , TAM_NOME);
+	fgets(lista[qtd].nome, TAM_NOME, stdin);
+	removerEnter(lista[qtd].nome , TAM_NOME);
 	printf("Informe o sexo:\n");
-	conta.sexo = getchar();
+	lista[qtd].sexo = getchar();
 	getchar();
 	printf("Insira os numeros do CPF:\n");
-	fgets(conta.cpf, TAM_CPF, stdin);
-	removerEnter(conta.cpf , TAM_CPF);
+	fgets(lista[qtd].cpf, TAM_CPF, stdin);
+	removerEnter(lista[qtd].cpf , TAM_CPF);
 	printf("Insira ano, mes e dia de nascimento, respectivamente\n");
-	scanf("%d%d%d",&conta.data_nascimento.ano,&conta.data_nascimento.mes,&conta.data_nascimento.dia);
-	return conta;
+	scanf("%d%d%d",&lista[qtd].data_nascimento.ano,&lista[qtd].data_nascimento.mes,&lista[qtd].data_nascimento.dia);
+	validoData = validarData( lista[qtd].data_nascimento.dia, lista[qtd].data_nascimento.mes, lista[qtd].data_nascimento.ano );
+	if( validoData == 0){
+		printf("Formato da data incorreto\n");
+		return 0;
+	}
+	return 1;
 }
 
 disciplina inserirDisciplina(){

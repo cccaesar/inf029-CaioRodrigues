@@ -27,6 +27,6 @@ typedef struct{
 } disciplina;
 
 disciplina inserirDisciplina();
-pessoa_dados inserirConta( int professor );
+int inserirConta( pessoa_dados lista[], int qtd ,int professor );
 void mostrarPerfil(pessoa_dados aluno);
 void mostrarDisciplina(disciplina materia);

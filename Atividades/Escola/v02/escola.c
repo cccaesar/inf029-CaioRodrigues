@@ -16,6 +16,7 @@ int main()
 	pessoa_dados lista_professores[TAM], lista_alunos[TAM_ALUNO];
 	disciplina lista_disciplinas[TAM];
 	int opcao = 1, i, qtd_alunos = 0, qtd_professores = 0, qtd_disciplinas = 0;
+	int matAlunos = 1 , matProfessores = 1, matDisciplinas = 1;
 	
 	while(opcao){
 		printf("Digite sua opção:\n");
@@ -49,7 +50,7 @@ int main()
 
 int menu_alunos( pessoa_dados lista_alunos[], int qtd_alunos )
 {
-	int opcao = 1, i;
+	int opcao = 1, i, retorno;
 	
 	while(opcao){
 		printf("Digite sua opção:\n");
@@ -59,13 +60,16 @@ int menu_alunos( pessoa_dados lista_alunos[], int qtd_alunos )
 		scanf("%d",&opcao);
 		switch(opcao){
 			case 1:{
-				for(i=0; i< qtd_alunos; i++){
+				for(i=0; i < qtd_alunos; i++){
 					mostrarPerfil(lista_alunos[i]);
 				}
 				break;
 			}
 			case 2:{
-				lista_alunos[qtd_alunos++] = inserirConta( 0 );
+				retorno = inserirConta(lista_alunos, qtd_alunos, 0 );
+				if(retorno){
+					qtd_alunos++;
+				}
 				break;
 			}
 		}
@@ -110,7 +114,7 @@ int menu_disciplinas( disciplina lista_disciplinas[], int qtd_disciplinas, pesso
 
 int menu_prof( pessoa_dados lista_prof[], int qtd_prof )
 {
-	int opcao = 1, i;
+	int opcao = 1, i, retorno;
 	
 	while(opcao){
 		printf("Digite sua opção:\n");
@@ -126,7 +130,10 @@ int menu_prof( pessoa_dados lista_prof[], int qtd_prof )
 				break;
 			}
 			case 2:{
-				 lista_prof[qtd_prof++] = inserirConta( 1 );
+				 retorno = inserirConta(  lista_prof ,qtd_prof ,1 );
+				 if(retorno){
+					qtd_prof++;
+				}
 				break;
 			}
 		}
