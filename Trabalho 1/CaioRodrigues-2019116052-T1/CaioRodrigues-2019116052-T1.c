@@ -63,7 +63,7 @@ int fatorial(int x)
 @objetivo
     Validar uma data
 @entrada
-    uma string data. Formatos que devem ser aceitos: dd/mm/aaaa, onde dd = dia, mm = mês, e aaaa, igual ao ano. dd em mm podem ter apenas um digito, e aaaa podem ter apenas dois digitos.
+    uma string data. Formatos que devem ser aceitos: dd/mm/aaaa, onde dd = dia, mm = mês, e aaaa, igual ao ano. dd e mm podem ter apenas um digito, e aaaa podem ter apenas dois digitos.
 @saida
     0 -> se data inválida
     1 -> se data válida
@@ -71,6 +71,90 @@ int fatorial(int x)
     Não utilizar funções próprias de string (ex: strtok)   
     pode utilizar strlen para pegar o tamanho da string
  */
+
+int souUmNumero( char c ){
+	switch(c){
+		case '0':{
+			return 1;
+		}
+		case '1':{
+			return 1;
+		}
+		case '2':{
+			return 1;
+		}
+		case '3':{
+			return 1;
+		}
+		case '4':{
+			return 1;
+		}
+		case '5':{
+			return 1;
+		}
+		case '6':{
+			return 1;
+		}
+		case '7':{
+			return 1;
+		}
+		case '8':{
+			return 1;
+		}
+		case '9':{
+			return 1;
+		}
+	}
+}
+ 
+
+int verificarData(char *data){
+	int i, qtd_barras = 0, qtd_numeros = 0;;
+	
+	for(i=0; data[i] == '\0'; i++){
+		if(data[i] == '/' && qtd_numeros == 0)
+			return 0;
+		else if (data[i] == '/'){
+			qtd_barras++;
+			if( qtd_barras < 2 && (qtd_numeros < 1 || qtd_numeros > 2 ){
+				return 0;
+			}
+			qtd_numeros = 0;
+		}
+		else if( souUmNumero( data[i] ) ){
+			qtd_numeros++;
+		}
+	}
+	if( qtd_numeros < 2 ){
+		return 0;
+	}
+	
+} 
+ 
+void quebrarData(char *data, *dia, *mes, *ano)
+{
+	int i, estagio = 1;
+	for(i=0; data[i] != '\0'; i++ ){
+		switch( estagio ){
+			case 1:{
+				dia = data[i];
+				break;
+			}
+			case 2:{
+				mes = data[i];
+				break;
+			}
+			case 3:{
+				ano = data[i];
+				break;
+			}
+		}
+		if(data[i] == '/'){
+			estagio++;
+		}
+	}
+}
+ 
 int q1(char *data)
 {
     int datavalida = 1;
