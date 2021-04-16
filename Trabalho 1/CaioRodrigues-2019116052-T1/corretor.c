@@ -41,13 +41,13 @@ int main()
     testQ6();*/
 }
 
-int main()
+/*int main()
 {
     //digita a data
     char data[11];
     //ler a data em "data"
     validarData(data);
-}
+}*/
 
 void testSomar()
 {
