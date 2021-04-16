@@ -277,13 +277,16 @@ int q1(char *data)
  */
 int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtdAnos)
 {
-
+	
     //calcule os dados e armazene nas três variáveis a seguir
     int nDias, nMeses, nAnos;
 
     if (q1(datainicial) == 0)
         return 2;
-
+	if (q1(datafinal) == 0)
+        return 3;
+	if( datainicial > datafinal )
+		return 4;
     nDias = 4;
     nMeses = 10;
     nAnos = 2;
