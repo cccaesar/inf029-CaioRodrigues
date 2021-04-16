@@ -209,30 +209,30 @@ int verificarBissexto(int ano){
 	}
 }
 
+int ultimoDiaMes( int mes, int ano ){
+	
+	if( mes == 2 && verificarBissexto( ano )){
+		return 29;
+	}
+	else if( mes == 2 && !verificarBissexto( ano )){
+		return 28;
+	}
+	else if( mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12 ){
+		return 31;
+	}
+	else
+		return 30;
+}
+
 int verificarDataInt(int dia, int mes, int ano){
-	int bissexto = verificarBissexto( ano );
 	
 	if( dia <= 0 || mes <= 0 || ano <= 0 || mes > 12)
 		return 0;
 	 
-	 if( dia > 28  ){
-		 if(mes == 2){
-			if(bissexto == 1 && dia == 29 )
-				return 1;
-			else
-				return 0;
-		 }
-		 else if(mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12)
-			if( dia <= 31 )
-				return 1;
-			else
-				return 0;
-		else if( mes == 4 || mes == 6 || mes == 9 || mes == 11)
-			if( dia < 31 )
-				return 1;
-			else
-				return 0;
-	 }
+	 if( dia > ultimoDiaMes( mes, ano )  )
+		 return 0;
+	 else
+		return 1;
 	 
 }
 
@@ -275,22 +275,47 @@ int q1(char *data)
     3 -> datafinal inválida
     4 -> datainicial > datafinal
  */
+ 
 int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtdAnos)
 {
 	
     //calcule os dados e armazene nas três variáveis a seguir
     int nDias, nMeses, nAnos;
-
+	char sDia1[3], sMes1[3], sAno1[5]; 
+	char sDia2[3], sMes2[3], sAno2[5];
+	int iDia1, iMes1, iAno1, iDia2, iMes2, iAno2;
+	int iCont;
     if (q1(datainicial) == 0)
         return 2;
 	if (q1(datafinal) == 0)
         return 3;
 	if( datainicial > datafinal )
 		return 4;
-    nDias = 4;
-    nMeses = 10;
-    nAnos = 2;
-
+	
+	quebrarData(datainicial, sDia1, sMes1, sAno1);
+	quebrarData(datafinal, sDia2, sMes2, sAno2);
+	iDia1 = converterStringEmInt(sDia1); iDia2 = converterStringEmInt(sDia2); iMes1 = converterStringEmInt(sMes1);
+	iMes2 = converterStringEmInt(sMes2); iAno1 = converterStringEmInt(sAno1); iAno2 = converterStringEmInt(sAno2);
+	
+	if( iDia1 == iDia2 && iMes1 == iMes2 ){
+		nAnos = iAno2 - iAno1;
+		nMeses = 0;
+		nDias = 0;
+	}
+	
+	else if( iDia1 == iDia2 && iAno1 == iAno2 ){
+		nAnos = 0;
+		nMeses = iMes2 - iMes1;
+		nDias = 0;
+	}
+	else if(iMes1 == iMes2 && iDia1 == iDia2){
+		nAnos = 0;
+		nMeses = 0;
+		nDias = iDia2 - iDia1;
+	}
+	else{
+		
+	}
     /*mantenha o código abaixo, para salvar os dados em 
     nos parâmetros da funcao
     */
