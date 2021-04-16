@@ -74,49 +74,76 @@ int fatorial(int x)
 
 int souUmNumero( char c ){
 	switch(c){
-		case '0':{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
 			return 1;
+		
+		default:
+			return 0;
+	}
+}
+ 
+int converterCharEmInt(char c){
+	switch(c){
+		case '0':{
+			return 0;
 		}
 		case '1':{
 			return 1;
 		}
 		case '2':{
-			return 1;
+			return 2;
 		}
 		case '3':{
-			return 1;
+			return 3;
 		}
 		case '4':{
-			return 1;
+			return 4;
 		}
 		case '5':{
-			return 1;
+			return 5;
 		}
 		case '6':{
-			return 1;
+			return 6;
 		}
 		case '7':{
-			return 1;
+			return 7;
 		}
 		case '8':{
-			return 1;
+			return 8;
 		}
 		case '9':{
-			return 1;
+			return 9;
 		}
 	}
 }
- 
 
-int verificarData(char *data){
+int converterStringEmInt(char *string){
+	int i, num = 0;
+	
+	for(i=0; string[i] != '\0'; i++){
+		num = (num * 10) + converterCharEmInt(string[i]);
+	}
+	return num;
+}
+
+int verificarDataString(char *data){
 	int i, qtd_barras = 0, qtd_numeros = 0;;
 	
-	for(i=0; data[i] == '\0'; i++){
+	for(i=0; data[i] != '\0'; i++){
 		if(data[i] == '/' && qtd_numeros == 0)
 			return 0;
 		else if (data[i] == '/'){
 			qtd_barras++;
-			if( qtd_barras < 2 && (qtd_numeros < 1 || qtd_numeros > 2 ){
+			if( qtd_barras < 2 && (qtd_numeros < 1 || qtd_numeros > 2 )){
 				return 0;
 			}
 			qtd_numeros = 0;
@@ -128,39 +155,103 @@ int verificarData(char *data){
 	if( qtd_numeros < 2 ){
 		return 0;
 	}
+	return 1;
 	
 } 
  
-void quebrarData(char *data, *dia, *mes, *ano)
+void quebrarData(char *data, char *dia, char *mes, char *ano)
 {
-	int i, estagio = 1;
-	for(i=0; data[i] != '\0'; i++ ){
+	int i,j, estagio = 1;
+	for(i=0, j=0; data[i] != '\0'; i++, j++){
 		switch( estagio ){
-			case 1:{
-				dia = data[i];
+			case 3:{
+				ano[j] = data[i];
+				if(data[i+1] == '\0')
+					ano[j+1] = '\0';
 				break;
 			}
 			case 2:{
-				mes = data[i];
+				if( data[i] == '/' ){
+					mes[j] = '\0';
+					j = -1;
+					estagio = 3;
+				}
+				else
+					mes[j] = data[i];
 				break;
 			}
-			case 3:{
-				ano = data[i];
+			case 1:{
+				if( data[i] == '/' ){
+					dia[j] = '\0';
+					j = -1;
+					estagio = 2;
+				}
+				else
+					dia[j] = data[i];
 				break;
 			}
-		}
-		if(data[i] == '/'){
-			estagio++;
 		}
 	}
 }
- 
+
+int verificarBissexto(int ano){
+    if( ano % 4  != 0){
+		return 0;
+	}
+    else if(ano % 100 != 0){
+		return 1;
+	}
+    else if( ano % 400 != 0){
+		return 0;
+	}
+    else{
+		return 1;
+	}
+}
+
+int verificarDataInt(int dia, int mes, int ano){
+	int bissexto = verificarBissexto( ano );
+	
+	if( dia <= 0 || mes <= 0 || ano <= 0 || mes > 12)
+		return 0;
+	 
+	 if( dia > 28  ){
+		 if(mes == 2){
+			if(bissexto == 1 && dia == 29 )
+				return 1;
+			else
+				return 0;
+		 }
+		 else if(mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12)
+			if( dia <= 31 )
+				return 1;
+			else
+				return 0;
+		else if( mes == 4 || mes == 6 || mes == 9 || mes == 11)
+			if( dia < 31 )
+				return 1;
+			else
+				return 0;
+	 }
+	 
+}
+
 int q1(char *data)
 {
-    int datavalida = 1;
+    int datavalida = 0;
 	char sDia[3], sMes[3], sAno[5];
 	int iDia, iMes, iAno;
 	
+	datavalida = verificarDataString( data );
+	if(datavalida == 0)
+		return 0;
+	quebrarData(data, sDia, sMes, sAno);
+	
+	iDia = converterStringEmInt(sDia);
+	iMes = converterStringEmInt(sMes);
+	iAno = converterStringEmInt(sAno);
+	
+	datavalida = verificarDataInt( iDia, iMes, iAno );
     //quebrar a string data em strings sDia, sMes, sAno
 
     //converter sDia, sMes e sAno em inteiros (ex: atoi)
@@ -169,10 +260,7 @@ int q1(char *data)
 
     //printf("%s\n", data);
 
-    if (datavalida)
-        return 1;
-    else
-        return 0;
+    return datavalida;
 }
 
 /*
