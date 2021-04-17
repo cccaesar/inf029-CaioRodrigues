@@ -294,9 +294,9 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
 	quebrarData(datafinal, sDia2, sMes2, sAno2);
 	iDia1 = converterStringEmInt(sDia1); iDia2 = converterStringEmInt(sDia2); iMes1 = converterStringEmInt(sMes1);
 	iMes2 = converterStringEmInt(sMes2); iAno1 = converterStringEmInt(sAno1); iAno2 = converterStringEmInt(sAno2);
-	if( iAno1 > Ano2)
+	if( iAno1 > iAno2)
 		return 4;
-	else if( iAno1 == Ano2 )
+	else if( iAno1 == iAno2 )
 			if( iMes1 > iMes2 )
 				return 4;
 			else if( iMes1 == iMes2 && iDia1 > iDia2 )
@@ -314,56 +314,24 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
 	}
 	
 	diaCont = iDia1, mesCont = iMes1,  anoCont2 = anoCont = iAno1;
-	/*while( (diaCont != iDia2) || (mesCont != iMes2) || (anoCont != iAno2) ){
-		if( nMeses == 0 && ( ultimoDiaMes( mesCont , anoCont ) == nDias  )){
-			nDias = 0;
-			nMeses++;
-			mesCont2 = mesCont + 1;
-		}
-		else if( nDias == ( ultimoDiaMes( mesCont2, anoCont2 ) ) ){
-			nDias == 0;
-			if(mesCont2 == 12){
-				mesCont2 = 1;
-				anoCont2++;
-			}
-			else
-				mesCont2++;
-		}
-		if( nMeses == 12 ){
-			nMeses = 0;
-			nAnos++;
-		}
-		if( nDias == 366){
-			nDias = 0;
-			nAnos++;
-		}
-		if( diaCont == ultimoDiaMes( mesCont, anoCont ) ){
-			diaCont = 0;
-			if( mesCont == 12 ){
-				mesCont = 1;
-				anoCont++;
-			}
-			else{
-				mesCont++;
-			}
-		}
-		diaCont++;
-		nDias++;
-			
-	}*/
 	nAnos = iAno2 - iAno1;
 	nMeses = iMes2 - iMes1;
 	nDias = iDia2 - iDia1;
-	if( iDia1 == iDia2 ){
-		if( verificarBissexto(iAno1) != 0 || ( verificarBissexto(iAno2) != 0 ){
-			nMeses = iMes2 - iMes1;
+	if( iDia1 > iDia2){
+		nDias = (ultimoDiaMes( iMes1, iAno1 ) - iDia1) + iDia2;
+		if( iMes2 > 1 && nDias >= ultimoDiaMes( iMes2, iAno2 ) ){
+			nDias = ultimoDiaMes( iMes2, iAno2 ) - nDias;
+			nMeses++;
 		}
-		else if(  ){
+		else if( iMes2 == 1 && nDias >= 31){
+			nDias = nDias - 31;
+		}
 			
-		}
 	}
-	else if(  )
-	printf("Dias:%d\nMeses:%d\nAnos:%d\n",nDias,nMeses,nAnos);
+	if( iMes1 < iMes2 || ( iMes1 == iMes2 && iDia2 > iDia1) ){
+		nAnos = iAno2 - iAno1;
+
+	}
     /*mantenha o código abaixo, para salvar os dados em 
     nos parâmetros da funcao
     */
@@ -371,7 +339,7 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
     *qtdAnos = nAnos;
     *qtdMeses = nMeses;
 
-    //coloque o retorno correto 16/02/20 e 12/04/20 | 02/01/20 e 06/04/20
+    //coloque o retorno correto
     return 1;
 }
 
