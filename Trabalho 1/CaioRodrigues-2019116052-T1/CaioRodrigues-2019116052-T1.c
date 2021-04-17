@@ -280,42 +280,90 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
 {
 	
     //calcule os dados e armazene nas três variáveis a seguir
-    int nDias, nMeses, nAnos;
+    int nDias = 0, nMeses = 0, nAnos = 0;
 	char sDia1[3], sMes1[3], sAno1[5]; 
 	char sDia2[3], sMes2[3], sAno2[5];
 	int iDia1, iMes1, iAno1, iDia2, iMes2, iAno2;
-	int iCont;
+	int diaCont, mesCont, anoCont, mesCont2, anoCont2;
     if (q1(datainicial) == 0)
         return 2;
 	if (q1(datafinal) == 0)
         return 3;
-	if( datainicial > datafinal )
-		return 4;
 	
 	quebrarData(datainicial, sDia1, sMes1, sAno1);
 	quebrarData(datafinal, sDia2, sMes2, sAno2);
 	iDia1 = converterStringEmInt(sDia1); iDia2 = converterStringEmInt(sDia2); iMes1 = converterStringEmInt(sMes1);
 	iMes2 = converterStringEmInt(sMes2); iAno1 = converterStringEmInt(sAno1); iAno2 = converterStringEmInt(sAno2);
+	if( iAno1 > Ano2)
+		return 4;
+	else if( iAno1 == Ano2 )
+			if( iMes1 > iMes2 )
+				return 4;
+			else if( iMes1 == iMes2 && iDia1 > iDia2 )
+				return 4;
 	
 	if( iDia1 == iDia2 && iMes1 == iMes2 ){
 		nAnos = iAno2 - iAno1;
-		nMeses = 0;
-		nDias = 0;
 	}
 	
 	else if( iDia1 == iDia2 && iAno1 == iAno2 ){
-		nAnos = 0;
 		nMeses = iMes2 - iMes1;
-		nDias = 0;
 	}
 	else if(iMes1 == iMes2 && iDia1 == iDia2){
-		nAnos = 0;
-		nMeses = 0;
 		nDias = iDia2 - iDia1;
 	}
-	else{
-		
+	
+	diaCont = iDia1, mesCont = iMes1,  anoCont2 = anoCont = iAno1;
+	/*while( (diaCont != iDia2) || (mesCont != iMes2) || (anoCont != iAno2) ){
+		if( nMeses == 0 && ( ultimoDiaMes( mesCont , anoCont ) == nDias  )){
+			nDias = 0;
+			nMeses++;
+			mesCont2 = mesCont + 1;
+		}
+		else if( nDias == ( ultimoDiaMes( mesCont2, anoCont2 ) ) ){
+			nDias == 0;
+			if(mesCont2 == 12){
+				mesCont2 = 1;
+				anoCont2++;
+			}
+			else
+				mesCont2++;
+		}
+		if( nMeses == 12 ){
+			nMeses = 0;
+			nAnos++;
+		}
+		if( nDias == 366){
+			nDias = 0;
+			nAnos++;
+		}
+		if( diaCont == ultimoDiaMes( mesCont, anoCont ) ){
+			diaCont = 0;
+			if( mesCont == 12 ){
+				mesCont = 1;
+				anoCont++;
+			}
+			else{
+				mesCont++;
+			}
+		}
+		diaCont++;
+		nDias++;
+			
+	}*/
+	nAnos = iAno2 - iAno1;
+	nMeses = iMes2 - iMes1;
+	nDias = iDia2 - iDia1;
+	if( iDia1 == iDia2 ){
+		if( verificarBissexto(iAno1) != 0 || ( verificarBissexto(iAno2) != 0 ){
+			nMeses = iMes2 - iMes1;
+		}
+		else if(  ){
+			
+		}
 	}
+	else if(  )
+	printf("Dias:%d\nMeses:%d\nAnos:%d\n",nDias,nMeses,nAnos);
     /*mantenha o código abaixo, para salvar os dados em 
     nos parâmetros da funcao
     */
@@ -323,7 +371,7 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
     *qtdAnos = nAnos;
     *qtdMeses = nMeses;
 
-    //coloque o retorno correto
+    //coloque o retorno correto 16/02/20 e 12/04/20 | 02/01/20 e 06/04/20
     return 1;
 }
 
