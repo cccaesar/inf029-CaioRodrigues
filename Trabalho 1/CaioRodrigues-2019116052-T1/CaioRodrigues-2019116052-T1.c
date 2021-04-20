@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+int tamanhoString( char *string );
 /*
 ## função utilizada para testes  ##
 
@@ -135,6 +136,18 @@ int converterStringEmInt(char *string){
 	return num;
 }
 
+int converterAnoEmInt( char *sAno, int *iAno )
+{
+	int length;
+	length = tamanhoString( sAno );
+	if( length == 3 || length == 1 || length > 4)
+		return 0;
+	else{
+		*iAno = converterStringEmInt(sAno);
+		return 1;
+	}
+}
+
 int verificarDataString(char *data){
 	int i, qtd_barras = 0, qtd_numeros = 0;;
 	
@@ -158,7 +171,15 @@ int verificarDataString(char *data){
 	return 1;
 	
 } 
- 
+
+int tamanhoString( char *string )
+{
+	int i;
+	for(i=0; string[i] != '\0'; i++ );
+	
+	return i;
+}
+
 void quebrarData(char *data, char *dia, char *mes, char *ano)
 {
 	int i,j, estagio = 1;
@@ -226,12 +247,11 @@ int ultimoDiaMes( int mes, int ano ){
 
 int verificarDataInt(int dia, int mes, int ano){
 	
-	if( dia <= 0 || mes <= 0 || ano <= 0 || mes > 12)
+	if( dia <= 0 || mes <= 0 || ano < 10   || ( ano > 99 && ano < 999  ) || mes > 12)
 		return 0;
-	 
-	 if( dia > ultimoDiaMes( mes, ano )  )
-		 return 0;
-	 else
+	if( dia > ultimoDiaMes( mes, ano )  )
+		return 0;
+	else
 		return 1;
 	 
 }
@@ -249,8 +269,11 @@ int q1(char *data)
 	
 	iDia = converterStringEmInt(sDia);
 	iMes = converterStringEmInt(sMes);
-	iAno = converterStringEmInt(sAno);
+	datavalida = converterAnoEmInt(sAno, &iAno);
 	
+	if(datavalida == 0)
+		return 0;
+		
 	datavalida = verificarDataInt( iDia, iMes, iAno );
     //quebrar a string data em strings sDia, sMes, sAno
 
@@ -353,10 +376,31 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
  @saida
     Um número n >= 0.
  */
+ 
+int verificarLetraMaiuscula(int c){
+	if( c > 90)
+		return 0;
+	else()
+}
+ 
+int buscaConsoante( char *string, char c, int isCaseSensitive ){
+	int i, qtdOcorrencias = 0, maiusculo = 0;
+	if(c > )
+	
+	for( i=0; string[i] != '\0';  )
+		
+}
+ 
 int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = -1;
-
+	printf("Caractere: %c, Caractere em ASCII: %d, Caractere em ASCII +");
+	if( c == 'ç' || c == 'Ç' )
+		qtdOcorrencias = buscaCedilha( texto, c , isCaseSensitive);
+	else if( c == 'A' ||   )
+		qtdOcorrencias = buscaVogal(texto, c, isCaseSensitive);
+	else
+		qtdOcorrencias = buscaConsoante( texto, c, isCaseSensitive);
     return qtdOcorrencias;
 }
 
