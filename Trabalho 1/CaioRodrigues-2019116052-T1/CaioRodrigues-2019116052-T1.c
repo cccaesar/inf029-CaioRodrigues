@@ -381,23 +381,17 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
     Um número n >= 0.
  */
  
-int verificarLetraMaiuscula(int c){
-	if( c > 90)
-		return 0;
-	else
-		return 1;
-}
-
 int verificarVogal( char c){
 	setlocale(LC_ALL, "");
 	if( c == 'a' || c == 'A' || c == 'Á' || c == 'á' || c == 'Â' || c == 'â' || c == 'À' || c == 'à' || c == 'Ã' || c == 'ã' || c == 'E' || c == 'e' || c == 'É' || c == 'é' || c == 'Ê' || c == 'ê' || c == 'I' || c == 'i' || c == 'Í' || c == 'í' || c == 'O' || c == 'o' || c == 'Ô' || c == 'ô' || c == 'Õ' || c == 'õ' || c == 'U' || c == 'u' || c == 'Ú' || c == 'ú' )
 		return 1;
-	return 0;
+	else 
+		return 0;
 }
 
 char removerAcento( char c ){
 	setlocale(LC_ALL, "");
-	if(c == 'á' || c == 'Á' || c == 'à' || c == 'À' || c == 'â' || c == 'Â')
+	if(c == 'á' || c == 'Á' || c == 'à' || c == 'À' || c == 'â' || c == 'Â' || c == 'Ã' || c == 'ã')
 		return 'a';
 	if(c == 'Í' || c == 'í')
 		return 'i';
@@ -413,9 +407,9 @@ char removerAcento( char c ){
 
 char removerAcentoCaseSensitive( char c ){
 	setlocale(LC_ALL, "");
-	if(c == 'á' || c == 'à' || c == 'â')
+	if(c == 'á' || c == 'à' || c == 'â' || c == 'ã')
 		return 'a';
-	if(c == 'Á' || c == 'À'|| c == 'Â')
+	if(c == 'Á' || c == 'À'|| c == 'Â' || c == 'Ã')
 		return 'A';
 	if(c == 'Í')
 		return 'I';
@@ -449,18 +443,18 @@ int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 	}
 	else if( vogal )
 		c2 = removerAcento( c );
-	if(isCaseSensitive)
+	//printf("%c\n", c2);
+	if(isCaseSensitive){
 		for( i=0; string[i] != '\0'; i++){
 			if( vogal )
 				string[i] = removerAcentoCaseSensitive( string[i] );
 			if( string[i] == c2 )
 				qtdOcorrencias++;
 		}
+	}
 	else{
-		if( maiusculo && (vogal == 0 ))
+		if( c <= 90 && c >= 65 && (vogal == 0 ))
 			c2 = c + 32;
-		else
-			c2 = c;
 		for( i=0; string[i] != '\0'; i++){
 			if( string[i] >= 65 && string[i] <= 90 && vogal == 0){
 				str2[i] = string[i] + 32;
@@ -468,15 +462,20 @@ int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 			else if( vogal ){
 				str2[i] = removerAcento( string[i] );
 			}
+			else{
+				str2[i] = string[i];
+			}
 			if(str2[i] == c2){
 				qtdOcorrencias++;
 			}
-			else if( (c2 == 'ç' || c2 == 'Ç') && (str2[i] == 'ç' || str2[i] == 'Ç') ){
+			else if( c2 == 'Ç' && (string[i] == 'ç' || string[i] == 'Ç') ){
+				printf("%c\n",c2);
 				qtdOcorrencias++;
 			}
 		}
 		str2[i] = '\0';
 	}
+	printf("%d %d %d\n",(int) 'ç',(int) 'Ç' ,(int)c2);
 	return qtdOcorrencias;
 }
 
@@ -484,6 +483,7 @@ int q3(char *texto, char c, int isCaseSensitive)
 {
 	setlocale(LC_ALL, "");
     int qtdOcorrencias = -1;
+	printf("%d\t%s\n",c, texto);
 	qtdOcorrencias = buscaCaracteres( texto, c, isCaseSensitive);
     return qtdOcorrencias;
 }
@@ -520,9 +520,35 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     Número invertido
  */
 
+int potenciacao(int base, int expoente){
+	int resultado;
+	if( base == 0 )
+		resultado = -1;
+	else if(expoente == 1)
+		resultado = base;
+	else if(expoente == 0)
+		resultado = 1;
+	else
+		resultado = base * potenciacao(base , expoente - 1);
+	return resultado;
+}
+
 int q5(int num)
 {
-
+	int i, j, numInvertido = 0;
+	
+	if(num / 10 != 0){
+		
+		for(i=1; num >= i; i *= 10){
+		}
+		i = i / 10;
+		
+		for(j = 0; i > 1; i = i / 10, j++){
+			numInvertido += ((num / i) - ((num / ( i * 10) )* 10 )) *  potenciacao(10 , j);
+		}
+		numInvertido += (num % 10) * potenciacao(10 , j) ;
+		num = numInvertido;
+	}
     return num;
 }
 
