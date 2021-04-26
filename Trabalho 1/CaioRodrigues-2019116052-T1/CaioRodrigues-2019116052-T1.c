@@ -565,5 +565,6 @@ int q5(int num)
 int q6(int numerobase, int numerobusca)
 {
     int qtdOcorrencias;
+	
     return qtdOcorrencias;
 }
