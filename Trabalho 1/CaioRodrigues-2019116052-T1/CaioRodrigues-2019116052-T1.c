@@ -383,23 +383,26 @@ int q2(char *datainicial, char *datafinal, int *qtdDias, int *qtdMeses, int *qtd
  
 int verificarVogal( char c){
 	setlocale(LC_ALL, "");
-	if( c == 'a' || c == 'A' || c == 'Á' || c == 'á' || c == 'Â' || c == 'â' || c == 'À' || c == 'à' || c == 'Ã' || c == 'ã' || c == 'E' || c == 'e' || c == 'É' || c == 'é' || c == 'Ê' || c == 'ê' || c == 'I' || c == 'i' || c == 'Í' || c == 'í' || c == 'O' || c == 'o' || c == 'Ô' || c == 'ô' || c == 'Õ' || c == 'õ' || c == 'U' || c == 'u' || c == 'Ú' || c == 'ú' )
-		return 1;
-	else 
-		return 0;
+	int i;
+	char vogais[99] = "AaÄäÁáÀàÃãÂâEeËëÉéÈèÊêIiÏïÍíÌìÎîUuÛûÙùÚúÜüOoÖöÔôÒòÓóÕõ";
+	for(i=0; vogais[i] != '\0'; i++){
+		if(c == vogais[i])
+			return 1;
+	}
+	return 0;
 }
 
 char removerAcento( char c ){
 	setlocale(LC_ALL, "");
-	if(c == 'á' || c == 'Á' || c == 'à' || c == 'À' || c == 'â' || c == 'Â' || c == 'Ã' || c == 'ã')
+	if(c == "á"[1] || c == "Á"[1] || c == "à"[1] || c == "À"[1] || c == "â"[1] || c == "Â"[1] || c == "Ã"[1] || c == "ã"[1] || c == "Ä"[1] || c == "ä"[1])
 		return 'a';
-	if(c == 'Í' || c == 'í')
+	if(c == "Í"[1] || c == "í"[1] || c == "Ì"[1] || c == "ì"[1] || c == "Ï"[1] || c == "ï"[1] || c == "Î"[1] || c == "î"[1])
 		return 'i';
-	if(c == 'Ú' || c == 'ú')
+	if(c == "Ú"[1] || c == "ú"[1] || c == "Ù"[1] || c == "ù"[1] || c == "Û"[1] || c == "û"[1] || c == "Ü"[1] || c == "ü"[1])
 		return 'u';
-	if(c == 'Ô' || c == 'ô' || c == 'Ó' || c == 'ó' || c == 'Õ' || c == 'õ')
+	if(c == "Ô"[1] || c == "ô"[1] || c == "Ó"[1] || c == "ó"[1] || c == "Õ"[1] || c == "õ"[1] || c == "Ö"[1] || c == "ö"[1] || c == "Ò"[1] || c == "ò"[1])
 		return 'o';
-	if(c == 'É' || c == 'é' || c == 'Ê' || c == 'ê')
+	if(c == "É"[1] || c == "é"[1] || c == "Ê"[1] || c == "ê"[1] || c == "È"[1] || c == "è"[1] || c == "Ë"[1] || c == "ë"[1])
 		return 'e';
 	else
 		return c;
@@ -407,25 +410,26 @@ char removerAcento( char c ){
 
 char removerAcentoCaseSensitive( char c ){
 	setlocale(LC_ALL, "");
-	if(c == 'á' || c == 'à' || c == 'â' || c == 'ã')
+	// "ÇçÄäÁáÀàÃãÂâËëÉéÈèÊêÏïÍíÌìÎîÛûÙùÚúÜüÖöÔôÒòÓóÕõ";
+	if(c == "á"[1] || c == "à"[1] || c == "â"[1] || c == "ã"[1] || c == "ä"[1])
 		return 'a';
-	if(c == 'Á' || c == 'À'|| c == 'Â' || c == 'Ã')
+	if(c == "Á"[1] || c == "À"[1]|| c == "Â"[1] || c == "Ã"[1] || c == "Ä"[1])
 		return 'A';
-	if(c == 'Í')
+	if(c == "Í"[1] || c == "Ï"[1] || c == "Ì"[1] || c == "Î"[1])
 		return 'I';
-	if(c == 'í')
+	if(c == "í"[1] || c == "ï"[1] || c == "ì"[1] || c == "î"[1])
 		return 'i';
-	if(c == 'Ú' )
+	if(c == "Ú"[1] || c == "Û"[1] || c == "Ù"[1] || c == "Ü"[1])
 		return 'U';
-	if(c == 'ú')
+	if(c == "ú"[1] || c == "ü"[1] || c == "û"[1] || c == "ù"[1])
 		return 'u';
-	if(c == 'Ô' || c == 'Ó' || c == 'Õ')
+	if(c == "Ô"[1] || c == "Ó"[1] || c == "Õ"[1] || c == "Ö"[1] || c == "Ò"[1])
 		return 'O';
-	if(c == 'ô'|| c == 'ó'|| c == 'õ' )
+	if(c == "ô"[1]|| c == "ó"[1]|| c == "õ"[1] || c == "ö"[1] || c == "ò"[1] )
 		return 'o';
-	if(c == 'É' || c == 'Ê')
+	if(c == "É"[1] || c == "Ê"[1] || c == "Ë"[1] || c == "È"[1])
 		return 'E';
-	if( c == 'é' || c == 'Ê' )
+	if( c == "é"[1] || c == "ê"[1] || c == "ë"[1] || c == "è"[1] )
 		return 'e';
 	else
 		return c;
@@ -433,10 +437,8 @@ char removerAcentoCaseSensitive( char c ){
 
 int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 	setlocale(LC_ALL, "");
-	int i, qtdOcorrencias = 0, maiusculo = 0, vogal = 0;
+	int i, qtdOcorrencias = 0, vogal = 0;
 	char c2 = c, str2[250];
-	if(c <= 90 && c >= 65)
-		maiusculo = 1;
 	vogal = verificarVogal( c );
 	if(vogal && isCaseSensitive){
 		c2 = removerAcentoCaseSensitive(c);
@@ -445,45 +447,50 @@ int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 		c2 = removerAcento( c );
 	//printf("%c\n", c2);
 	if(isCaseSensitive){
+		if(c2 == "Ç"[1])
+			c2 = 'C';
+		else if(c2 == "ç"[1])
+			c2 = 'c';
 		for( i=0; string[i] != '\0'; i++){
 			if( vogal )
 				string[i] = removerAcentoCaseSensitive( string[i] );
+			else if((c2 == 'c' && string[i] == "ç"[1]) || (c2 == 'C' && string[i] == "Ç"[1] )){
+				qtdOcorrencias++;
+			}
 			if( string[i] == c2 )
 				qtdOcorrencias++;
 		}
 	}
 	else{
-		if( c <= 90 && c >= 65 && (vogal == 0 ))
+		if(c2 == "ç"[1] || c2 == "Ç"[1])
+			c2 = 'c';
+		if( c <= 90 && c >= 65)
 			c2 = c + 32;
 		for( i=0; string[i] != '\0'; i++){
 			if( string[i] >= 65 && string[i] <= 90 && vogal == 0){
 				str2[i] = string[i] + 32;
 			}
-			else if( vogal ){
-				str2[i] = removerAcento( string[i] );
-			}
-			else{
+			else if(string[i] == "ç"[1] || string[i] == "Ç"[1])
+				str2[i] = 'c';
+			else if((string[i] >= -128 && string[i] <= -100 ))
+				str2[i] = removerAcento(string[i]);
+			else /*if(string[i] != -61)*/{
 				str2[i] = string[i];
 			}
 			if(str2[i] == c2){
 				qtdOcorrencias++;
 			}
-			else if( c2 == 'Ç' && (string[i] == 'ç' || string[i] == 'Ç') ){
-				printf("%c\n",c2);
-				qtdOcorrencias++;
-			}
 		}
 		str2[i] = '\0';
 	}
-	printf("%d %d %d\n",(int) 'ç',(int) 'Ç' ,(int)c2);
 	return qtdOcorrencias;
 }
 
 int q3(char *texto, char c, int isCaseSensitive)
 {
 	setlocale(LC_ALL, "");
-    int qtdOcorrencias = -1;
-	printf("%d\t%s\n",c, texto);
+    int qtdOcorrencias = -1, i;
+	char caractere[2];
 	qtdOcorrencias = buscaCaracteres( texto, c, isCaseSensitive);
     return qtdOcorrencias;
 }
