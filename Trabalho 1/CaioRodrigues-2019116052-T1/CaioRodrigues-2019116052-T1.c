@@ -489,8 +489,7 @@ int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 int q3(char *texto, char c, int isCaseSensitive)
 {
 	setlocale(LC_ALL, "");
-    int qtdOcorrencias = -1, i;
-	char caractere[2];
+    int qtdOcorrencias = -1;
 	qtdOcorrencias = buscaCaracteres( texto, c, isCaseSensitive);
     return qtdOcorrencias;
 }
