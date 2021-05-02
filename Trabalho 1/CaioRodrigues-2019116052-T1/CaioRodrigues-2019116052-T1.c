@@ -580,8 +580,11 @@ int q5(int num)
     return num;
 }
 
-/*
- Q5 = ocorrência de um número em outro
+/* 34567368 e 3
+	34567368 % 10 = 8
+	3456736 6
+	345673 3
+ Q6 = ocorrência de um número em outro
  @objetivo
     Verificar quantidade de vezes da ocorrência de um número em outro
  @entrada
@@ -592,7 +595,34 @@ int q5(int num)
 
 int q6(int numerobase, int numerobusca)
 {
-    int qtdOcorrencias;
+    int qtdOcorrencias = 0, numerobusca2 = numerobusca;
 	
+	do
+	{	
+		if(numerobase / 10 == 0 && numerobusca2 / 10 == 0 && numerobase != numerobusca2)
+		{
+			numerobusca2 = numerobusca;
+		}
+		else if(numerobase / 10 != 0 && numerobusca2 / 10 != 0 && numerobusca2 % 10 !=  numerobase % 10)
+		{
+			numerobusca2 = numerobusca;
+		}
+		if(numerobase / 10 == 0 && numerobusca2 / 10 == 0 && numerobase == numerobusca2)
+		{
+			qtdOcorrencias++;
+			numerobusca2 = numerobusca;
+		}
+		else if(numerobase / 10 != 0 && numerobusca2 / 10 == 0 && numerobusca2 == numerobase % 10)
+		{
+			qtdOcorrencias++;
+			numerobusca2 = numerobusca;
+		}
+		else if(numerobase / 10 != 0 && numerobusca2 / 10 != 0 && numerobusca2 % 10 ==  numerobase % 10)
+		{
+			numerobusca2 /= 10;
+		}
+		numerobase /= 10;
+	}while(numerobase != 0);
+
     return qtdOcorrencias;
 }
