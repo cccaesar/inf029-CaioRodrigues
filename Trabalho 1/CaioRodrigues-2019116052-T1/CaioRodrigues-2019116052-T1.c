@@ -440,13 +440,13 @@ int buscaCaracteres( char *string, char c, int isCaseSensitive ){
 	int i, qtdOcorrencias = 0, vogal = 0;
 	char c2 = c, str2[250];
 	vogal = verificarVogal( c );
-	if(vogal && isCaseSensitive){
+	if(vogal && isCaseSensitive == 1){
 		c2 = removerAcentoCaseSensitive(c);
 	}
 	else if( vogal )
 		c2 = removerAcento( c );
 	//printf("%c\n", c2);
-	if(isCaseSensitive){
+	if(isCaseSensitive == 1){
 		if(c2 == "Ç"[1])
 			c2 = 'C';
 		else if(c2 == "ç"[1])
