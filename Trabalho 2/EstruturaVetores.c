@@ -6,6 +6,8 @@
 
 int vetorPrincipal[TAM];
 
+int ehPosicaoValida(int posicao);
+
 void dobrar(int *x)
 {
 
@@ -21,21 +23,41 @@ Rertono (int)
     SEM_ESPACO_DE_MEMORIA - Sem espaço de memória
     TAMANHO_INVALIDO - o tamanho tem inteiro maior ou igual a 1
 */
+
+No criarCelulas()
+{
+    No celula;
+    
+}
+
 int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
 
     int retorno = 0, i;
+    No celula;
     // a posicao pode já existir estrutura auxiliar
-    retorno = JA_TEM_ESTRUTURA_AUXILIAR;
-    // se posição é um valor válido {entre 1 e 10}
-    retorno = POSICAO_INVALIDA;
+    if( ehPosicaoValida(posicao) == -5)
+    {
+        retorno = POSICAO_INVALIDA;
+    }
+    else if(vetorPrincipal[posicao] != 0)
+    {
+        retorno = JA_TEM_ESTRUTURA_AUXILIAR;
+    }
     // o tamanho ser muito grande
-    retorno = SEM_ESPACO_DE_MEMORIA;
+    else if( tamanho > 10 )
+        retorno = SEM_ESPACO_DE_MEMORIA;
     // o tamanho nao pode ser menor que 1
-    retorno = TAMANHO_INVALIDO;
+    else if(tamanho < 1)
+        retorno = TAMANHO_INVALIDO;
     // deu tudo certo, crie
-    retorno = SUCESSO;
+    else 
+    {   
+        for(i=1; i <= tamanho; i++){
 
+        }
+        retorno = SUCESSO;
+    }
     return retorno;
 }
 
@@ -55,25 +77,40 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     int existeEstruturaAuxiliar = 0;
     int temEspaco = 0;
     int posicao_invalida = 0;
-    No *estrAuxiliar;
+    No *ptrEstrAuxiliar, strAuxiliar;
 
-    if( posicao > TAM || posicao < 1 )
-        posicao_invalida = 1;
-    if (posicao_invalida)
+
+    if( ehPosicaoValida(posicao) == -5)
         retorno = POSICAO_INVALIDA;
     else
     {
         // testar se existe a estrutura auxiliar
-        if(vetorPrincipal[posicao] != NULL){
+        posicao--;
+        if(vetorPrincipal[posicao] != 0){
             existeEstruturaAuxiliar = 1;
-            estrAuxiliar = vetorPrincipal[posicao];
+            ptrEstrAuxiliar = vetorPrincipal[posicao];
+            strAuxiliar = *ptrEstrAuxiliar;
         }
         if (existeEstruturaAuxiliar)
         {
-            
+            while( 1 ){
+                if( strAuxiliar.conteudo == 0)
+                {
+                    temEspaco = 1;
+                    break;
+                }
+                else if(strAuxiliar.prox != NULL)
+                {
+                    ptrEstrAuxiliar = strAuxiliar.prox;
+                    strAuxiliar = *strAuxiliar.prox;
+                }
+                else
+                    break;
+            }
             if (temEspaco)
             {
                 //insere
+                strAuxiliar.conteudo = valor;
                 retorno = SUCESSO;
             }
             else
@@ -250,6 +287,13 @@ Retorno void
 */
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[])
 {
+    No celula;
+    int i;
+    for(celula = *inicio, i=0; celula.prox != NULL; vetorAux[i] = celula.conteudo){
+        i++;
+        if(celula.prox != NULL)
+            celula = *celula.prox;
+    }
 }
 
 /*
@@ -270,7 +314,7 @@ void inicializar()
 {
     int i;
     for(i=0; i > TAM; i++){
-        vetorPrincipal[i] == NULL;
+        vetorPrincipal[i] == 0;
     }
 }
 
