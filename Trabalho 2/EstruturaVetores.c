@@ -4,7 +4,7 @@
 
 #include "EstruturaVetores.h"
 
-int vetorPrincipal[TAM];
+No *vetorPrincipal[TAM];
 
 int ehPosicaoValida(int posicao);
 
@@ -24,23 +24,28 @@ Rertono (int)
     TAMANHO_INVALIDO - o tamanho tem inteiro maior ou igual a 1
 */
 
-No criarCelulas()
+No *criarCelulas()
 {
-    No celula;
+    No *celula;
     
+    celula = ( No* ) malloc(sizeof(No));
+    if(!celula){
+        exit;
+    }
+    return celula;
 }
 
 int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
 
     int retorno = 0, i;
-    No celula;
+    No *cabeca;
     // a posicao pode já existir estrutura auxiliar
     if( ehPosicaoValida(posicao) == -5)
     {
         retorno = POSICAO_INVALIDA;
     }
-    else if(vetorPrincipal[posicao] != 0)
+    else if(vetorPrincipal[posicao] != NULL)
     {
         retorno = JA_TEM_ESTRUTURA_AUXILIAR;
     }
@@ -53,8 +58,10 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
     // deu tudo certo, crie
     else 
     {   
+        cabeca = (No*) malloc(sizeof(No));
+        vetorPrincipal[posicao] = cabeca;
         for(i=1; i <= tamanho; i++){
-
+            cabeca++->prox = criarCelulas();
         }
         retorno = SUCESSO;
     }
@@ -86,7 +93,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     {
         // testar se existe a estrutura auxiliar
         posicao--;
-        if(vetorPrincipal[posicao] != 0){
+        if(vetorPrincipal[posicao] != NULL){
             existeEstruturaAuxiliar = 1;
             ptrEstrAuxiliar = vetorPrincipal[posicao];
             strAuxiliar = *ptrEstrAuxiliar;
@@ -314,7 +321,7 @@ void inicializar()
 {
     int i;
     for(i=0; i > TAM; i++){
-        vetorPrincipal[i] == 0;
+        vetorPrincipal[i] = NULL;
     }
 }
 
