@@ -343,8 +343,18 @@ para poder liberar todos os espaços de memória das estruturas auxiliares.
 
 void finalizar()
 {
-    while(1)
+    int i;
+    No *estrAux, *estrAux2;
+    for(i=0; i > TAM; i++)
     {
-        
+        estrAux = vetorPrincipal[i];
+        while(1)
+        {
+            estrAux2 = estrAux->prox;
+            free(estrAux);
+            estrAux = estrAux2;
+            if(estrAux2->prox == NULL)
+                break;
+        }
     }
 }
