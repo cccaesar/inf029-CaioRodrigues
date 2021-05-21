@@ -32,20 +32,21 @@ No *criarCelulas()
     if(!celula){
         exit;
     }
+    celula->conteudo = 0;
     return celula;
 }
 
 int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
 
-    int retorno = 0, i;
+    int retorno = 0, i = 1;
     No *cabeca;
     // a posicao pode já existir estrutura auxiliar
     if( ehPosicaoValida(posicao) == -5)
     {
         retorno = POSICAO_INVALIDA;
     }
-    else if(vetorPrincipal[posicao] != NULL)
+    else if(vetorPrincipal[posicao - 1] != NULL)
     {
         retorno = JA_TEM_ESTRUTURA_AUXILIAR;
     }
@@ -58,11 +59,23 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
     // deu tudo certo, crie
     else 
     {   
-        cabeca = (No*) malloc(sizeof(No));
-        vetorPrincipal[posicao] = cabeca;
-        for(i=1; i <= tamanho; i++){
-            cabeca++->prox = criarCelulas();
+        cabeca = malloc(sizeof(No));
+        vetorPrincipal[posicao - 1] = cabeca;
+        while(i <= tamanho)
+        {   
+            cabeca->conteudo = 0;
+            if(i != tamanho)
+            {
+                cabeca->prox = malloc(sizeof(No));
+                cabeca = cabeca->prox;
+            }
+            else
+            {
+                cabeca->prox = NULL;
+            }
+            i++;
         }
+        
         retorno = SUCESSO;
     }
     return retorno;
@@ -84,7 +97,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     int existeEstruturaAuxiliar = 0;
     int temEspaco = 0;
     int posicao_invalida = 0;
-    No *ptrEstrAuxiliar, strAuxiliar;
+    No *ptrEstrAuxiliar;
 
 
     if( ehPosicaoValida(posicao) == -5)
@@ -96,20 +109,18 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
         if(vetorPrincipal[posicao] != NULL){
             existeEstruturaAuxiliar = 1;
             ptrEstrAuxiliar = vetorPrincipal[posicao];
-            strAuxiliar = *ptrEstrAuxiliar;
         }
         if (existeEstruturaAuxiliar)
         {
             while( 1 ){
-                if( strAuxiliar.conteudo == 0)
+                if( ptrEstrAuxiliar->conteudo == 0)
                 {
                     temEspaco = 1;
                     break;
                 }
-                else if(strAuxiliar.prox != NULL)
+                else if(ptrEstrAuxiliar->prox != NULL)
                 {
-                    ptrEstrAuxiliar = strAuxiliar.prox;
-                    strAuxiliar = *strAuxiliar.prox;
+                    ptrEstrAuxiliar = ptrEstrAuxiliar->prox;
                 }
                 else
                     break;
@@ -117,7 +128,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
             if (temEspaco)
             {
                 //insere
-                strAuxiliar.conteudo = valor;
+                ptrEstrAuxiliar->conteudo = valor;
                 retorno = SUCESSO;
             }
             else
@@ -332,4 +343,8 @@ para poder liberar todos os espaços de memória das estruturas auxiliares.
 
 void finalizar()
 {
+    while(1)
+    {
+        
+    }
 }
