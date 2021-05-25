@@ -39,7 +39,7 @@ No *criarCelulas()
 int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
 
-    int retorno = 0, i = 1;
+    int retorno = 0, i;
     No *cabeca;
     // a posicao pode já existir estrutura auxiliar
     if( ehPosicaoValida(posicao) == -5)
@@ -61,10 +61,10 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
     {   
         cabeca = malloc(sizeof(No));
         vetorPrincipal[posicao - 1] = cabeca;
-        while(i <= tamanho)
+        for( i=0; i < tamanho ;i++ )
         {   
             cabeca->conteudo = 0;
-            if(i != tamanho)
+            if(i != (tamanho - 1))
             {
                 cabeca->prox = malloc(sizeof(No));
                 cabeca = cabeca->prox;
@@ -73,7 +73,6 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
             {
                 cabeca->prox = NULL;
             }
-            i++;
         }
         
         retorno = SUCESSO;
@@ -158,6 +157,42 @@ Rertono (int)
 int excluirNumeroDoFinaldaEstrutura(int posicao)
 {
     int retorno = SUCESSO;
+    No *strAuxiliar, *strAuxiliar2;
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA)
+        retorno = POSICAO_INVALIDA;
+    else if(vetorPrincipal[posicao-1] == NULL)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+    {
+        strAuxiliar = vetorPrincipal[posicao-1];
+        //printf("Valores dentro da estrutura:\n");
+        //printf("%d\n", strAuxiliar->conteudo);
+        if(strAuxiliar->conteudo == 0)
+            retorno = ESTRUTURA_AUXILIAR_VAZIA;
+        while(1)
+        {
+
+            if(strAuxiliar->prox != NULL)
+                strAuxiliar2 = strAuxiliar->prox;
+            else
+                break;
+            //printf("%d\n", strAuxiliar2->conteudo);
+            //printf("%d\n", strAuxiliar->conteudo);
+            if(strAuxiliar2->conteudo == 0)
+            {
+                strAuxiliar->conteudo = 0;
+                break;
+            }
+            else if(strAuxiliar2->prox == NULL)
+            {   
+                //printf("%d\n", strAuxiliar2->conteudo);
+                strAuxiliar2->conteudo = 0;
+                //printf("Fim do laço.\n");
+                break;
+            }
+            strAuxiliar = strAuxiliar2;
+        }
+    }
     return retorno;
 }
 
