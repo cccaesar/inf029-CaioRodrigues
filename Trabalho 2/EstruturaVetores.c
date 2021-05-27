@@ -7,11 +7,48 @@
 No *vetorPrincipal[TAM];
 
 int ehPosicaoValida(int posicao);
+int passarConteudoParaArray(int *v, No *strAuxiliar);
+void ordenarInteiros(int *v, int tam);
 
 void dobrar(int *x)
 {
 
     *x = *x * 2;
+}
+
+void ordenarInteiros(int *v, int tam)
+{
+    int i, j, menor, aux;
+
+    for(i=0; i < tam; i++)
+    {
+        menor = i;
+        for(j=i + 1; j < tam; j++)
+        {
+            if(v[j] < v[menor]){
+                menor = j;
+            }
+        }
+        aux = v[i];
+        v[i] = v[menor];
+        v[menor] = aux;
+        
+    }
+}
+
+int passarConteudoParaArray(int *v, No *strAuxiliar)
+{   
+    int i=0;
+    do
+    {
+        if(strAuxiliar->conteudo != 0)
+        {
+            v[i] = strAuxiliar->conteudo;
+            i++;
+        }
+        strAuxiliar = strAuxiliar->prox;
+    }while(strAuxiliar->prox != NULL && strAuxiliar->conteudo != 0);
+    return i;
 }
 /*
 Objetivo: criar estrutura auxiliar na posição 'posicao'.
@@ -210,7 +247,44 @@ Rertono (int)
 */
 int excluirNumeroEspecificoDeEstrutura(int posicao, int valor)
 {
-    int retorno = SUCESSO;
+    int retorno = SUCESSO, numeroExiste = 0;
+    No *strAuxiliar,*strAuxiliar2;
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA)
+        retorno = POSICAO_INVALIDA;
+    else if( vetorPrincipal[posicao - 1] == NULL )
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+    {
+        strAuxiliar = vetorPrincipal[posicao - 1];
+        if(strAuxiliar->conteudo == 0)
+            retorno = ESTRUTURA_AUXILIAR_VAZIA; 
+        else
+        {
+            while(1)
+            {   
+                if(strAuxiliar->prox != NULL)
+                    strAuxiliar2 = strAuxiliar->prox;
+                if(strAuxiliar->conteudo == valor && numeroExiste == 0)
+                {
+                    numeroExiste = 1;
+                    strAuxiliar->conteudo = 0;
+                }
+                if(numeroExiste && strAuxiliar2->conteudo != 0)
+                {
+                    strAuxiliar->conteudo = strAuxiliar2->conteudo;
+                    strAuxiliar2->conteudo = 0;
+                }
+                else if(numeroExiste)
+                    break;
+                if(strAuxiliar->prox != NULL)
+                    strAuxiliar = strAuxiliar->prox;
+                else
+                    break;
+            }
+            if(numeroExiste == 0)
+                retorno = NUMERO_INEXISTENTE;
+        }
+    }
     return retorno;
 }
 
@@ -238,8 +312,18 @@ Retorno (int)
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
 
-    int retorno = 0;
-
+    int retorno = 0, i;
+    No *strAuxiliar;
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA )
+        retorno = POSICAO_INVALIDA;
+    else if(vetorPrincipal[posicao - 1] == NULL)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+    {   i = -1;
+        strAuxiliar = vetorPrincipal[posicao - 1];
+        i = passarConteudoParaArray(vetorAux, strAuxiliar);
+        retorno = SUCESSO;
+    }
     return retorno;
 }
 
@@ -254,8 +338,19 @@ Rertono (int)
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
 
-    int retorno = 0;
-
+    int retorno = 0, tamVetor;
+    No *strAuxiliar;
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA )
+        retorno = POSICAO_INVALIDA;
+    else if(vetorPrincipal[posicao - 1] == NULL)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+    {   
+        strAuxiliar = vetorPrincipal[posicao - 1];
+        tamVetor = passarConteudoParaArray( vetorAux, strAuxiliar);
+        ordenarInteiros(vetorAux, tamVetor);
+        retorno = SUCESSO;
+    }
     return retorno;
 }
 
@@ -269,8 +364,29 @@ Rertono (int)
 */
 int getDadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
-
-    int retorno = 0;
+    
+    int retorno = 0, i,j = 0;
+    No *strAuxiliar;
+    vetorAux[0] = 0;
+    for(i=0; i < TAM; i++ ){
+        strAuxiliar = vetorPrincipal[i];
+        while(strAuxiliar != NULL && strAuxiliar->conteudo != 0)
+        {
+            if(strAuxiliar->conteudo != 0)
+            {
+                vetorAux[j] = strAuxiliar->conteudo;
+                j++;
+            }
+            strAuxiliar = strAuxiliar->prox;
+        }
+    }
+    
+    if(vetorAux[0] == 0)
+    {
+        retorno =   TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    }
+    else
+        retorno = SUCESSO;
     return retorno;
 }
 
@@ -285,7 +401,21 @@ Rertono (int)
 int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
 
-    int retorno = 0;
+    int retorno = 0, i, tamanho = 0;
+    vetorAux[0] = 0;
+    for(i=1; i <= TAM; i++ ){
+        tamanho = getDadosEstruturaAuxiliar(i, vetorAux);
+    }
+    if(vetorAux[0] == 0)
+    {
+        retorno =   TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    }
+    else
+    {
+        retorno = SUCESSO;
+        if(tamanho)
+            ordenarInteiros(vetorAux, tamanho);
+    }
     return retorno;
 }
 
@@ -366,7 +496,7 @@ Objetivo: inicializa o programa. deve ser chamado ao inicio do programa
 void inicializar()
 {
     int i;
-    for(i=0; i > TAM; i++){
+    for(i=1; i <= TAM; i++){
         vetorPrincipal[i] = NULL;
     }
 }
