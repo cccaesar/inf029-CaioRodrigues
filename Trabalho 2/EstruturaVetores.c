@@ -401,10 +401,20 @@ Rertono (int)
 int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
 
-    int retorno = 0, i, tamanho = 0;
+    int retorno = 0, i, j = 0;
+    No* strAuxiliar;
     vetorAux[0] = 0;
-    for(i=1; i <= TAM; i++ ){
-        tamanho = getDadosEstruturaAuxiliar(i, vetorAux);
+    for(i=0; i < TAM; i++ ){
+        strAuxiliar = vetorPrincipal[i];
+        while(strAuxiliar != NULL && strAuxiliar->conteudo != 0)
+        {
+            if(strAuxiliar->conteudo != 0)
+            {
+                vetorAux[j] = strAuxiliar->conteudo;
+                j++;
+            }
+            strAuxiliar = strAuxiliar->prox;
+        }
     }
     if(vetorAux[0] == 0)
     {
@@ -413,8 +423,8 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
     else
     {
         retorno = SUCESSO;
-        if(tamanho)
-            ordenarInteiros(vetorAux, tamanho);
+        if(j)
+            ordenarInteiros(vetorAux, j);
     }
     return retorno;
 }
