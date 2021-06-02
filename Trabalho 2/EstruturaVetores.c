@@ -436,30 +436,32 @@ void liberarEstrutura(No *str)
 
 int substituirEstrutura(No *estr, int novoTamanho, int posicao)
 {
-    int i, j, *valoresAnteriores, tamanhoAtual, erro = 0;
-    No *cabeca;
-    for(i = 0; estr != NULL; i++)
-    {
-        //valoresAnteriores[i] = estr->conteudo;
-        estr = estr->prox;
-    }
-    tamanhoAtual = verificarTamanhoEstruturaAuxiliar(estr);
-    liberarEstrutura(estr);
+    int i, tamanhoAtual, erro = 0;
+    No *cabeca1, *cabeca2, *novaEstr;
+    cabeca1 = estr;
+    tamanhoAtual = verificarTamanhoEstruturaAuxiliar(cabeca1);
+    //liberarEstrutura(cabeca);
     for(i=0; i < novoTamanho; i++)
-    {
-        estr = malloc(sizeof(No*));
-        //estr->conteudo = valoresAnteriores[i];
+    {   
+        novaEstr = malloc(sizeof(No*));
+        if(estr != NULL && estr->conteudo != 0)
+            novaEstr->conteudo = estr->conteudo;
+        else
+            novaEstr->conteudo = 0;
         if( i < novoTamanho - 1)
         {
-            estr->prox = malloc(sizeof(No*));
-            estr = estr->prox;
+            novaEstr->prox = malloc(sizeof(No*));
+            novaEstr = novaEstr->prox;
         }
         else
-            estr->prox = NULL;
+            novaEstr->prox = NULL;
+        if(i < tamanhoAtual)
+            estr = estr->prox;
         if(i == 0)
-            cabeca = estr;
+            cabeca2 = novaEstr;
     }
-    vetorPrincipal[posicao] = cabeca;
+    liberarEstrutura(cabeca1);
+    vetorPrincipal[posicao] = cabeca2;
     return erro;
 }
 /*
@@ -482,14 +484,15 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho)
     else if( vetorPrincipal[posicao - 1] == NULL )
         retorno = SEM_ESTRUTURA_AUXILIAR;    
     else
-    {   
-        
+    {
         strAux = vetorPrincipal[posicao - 1];
         tamanhoAtual = verificarTamanhoEstruturaAuxiliar(strAux);
         if(tamanhoAtual + novoTamanho < 1)
             retorno = NOVO_TAMANHO_INVALIDO;
         else
+        {   
             substituirEstrutura(strAux, tamanhoAtual + novoTamanho, posicao - 1);
+        }
         /*
         if(tamanhoAtual + novoTamanho < 1)
             retorno = NOVO_TAMANHO_INVALIDO;
