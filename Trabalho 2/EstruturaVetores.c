@@ -9,6 +9,8 @@ No *vetorPrincipal[TAM];
 int ehPosicaoValida(int posicao);
 int passarConteudoParaArray(int *v, No *strAuxiliar);
 void ordenarInteiros(int *v, int tam);
+int verificarTamanhoEstruturaAuxiliar( No *strAuxiliar );
+No *criarCelulas();
 
 void dobrar(int *x)
 {
@@ -39,15 +41,12 @@ void ordenarInteiros(int *v, int tam)
 int passarConteudoParaArray(int *v, No *strAuxiliar)
 {   
     int i=0;
-    do
+    while(strAuxiliar != NULL && strAuxiliar->conteudo != 0)
     {
-        if(strAuxiliar->conteudo != 0)
-        {
-            v[i] = strAuxiliar->conteudo;
-            i++;
-        }
+        v[i] = strAuxiliar->conteudo;
+        i++;
         strAuxiliar = strAuxiliar->prox;
-    }while(strAuxiliar->prox != NULL && strAuxiliar->conteudo != 0);
+    }
     return i;
 }
 /*
@@ -77,7 +76,7 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
 {
 
     int retorno = 0, i;
-    No *cabeca;
+    No *cabeca, strAuxiliar;
     // a posicao pode já existir estrutura auxiliar
     if( ehPosicaoValida(posicao) == -5)
     {
@@ -95,7 +94,7 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
         retorno = TAMANHO_INVALIDO;
     // deu tudo certo, crie
     else 
-    {   
+    {      
         cabeca = malloc(sizeof(No));
         vetorPrincipal[posicao - 1] = cabeca;
         for( i=0; i < tamanho ;i++ )
@@ -111,7 +110,6 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
                 cabeca->prox = NULL;
             }
         }
-        
         retorno = SUCESSO;
     }
     return retorno;
@@ -136,30 +134,22 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     No *ptrEstrAuxiliar;
 
 
-    if( ehPosicaoValida(posicao) == -5)
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA)
         retorno = POSICAO_INVALIDA;
     else
     {
         // testar se existe a estrutura auxiliar
-        posicao--;
-        if(vetorPrincipal[posicao] != NULL){
+        if(vetorPrincipal[posicao - 1] != NULL){
             existeEstruturaAuxiliar = 1;
-            ptrEstrAuxiliar = vetorPrincipal[posicao];
+            ptrEstrAuxiliar = vetorPrincipal[posicao - 1];
         }
         if (existeEstruturaAuxiliar)
         {
-            while( 1 ){
-                if( ptrEstrAuxiliar->conteudo == 0)
-                {
+            while( ptrEstrAuxiliar != NULL && temEspaco == 0){
+                if(ptrEstrAuxiliar->conteudo == 0)
                     temEspaco = 1;
-                    break;
-                }
-                else if(ptrEstrAuxiliar->prox != NULL)
-                {
-                    ptrEstrAuxiliar = ptrEstrAuxiliar->prox;
-                }
                 else
-                    break;
+                    ptrEstrAuxiliar = ptrEstrAuxiliar->prox;
             }
             if (temEspaco)
             {
@@ -194,7 +184,7 @@ Rertono (int)
 int excluirNumeroDoFinaldaEstrutura(int posicao)
 {
     int retorno = SUCESSO;
-    No *strAuxiliar, *strAuxiliar2;
+    No *strAuxiliar, *strAuxiliarAnterior;
     if( ehPosicaoValida(posicao) == POSICAO_INVALIDA)
         retorno = POSICAO_INVALIDA;
     else if(vetorPrincipal[posicao-1] == NULL)
@@ -202,32 +192,19 @@ int excluirNumeroDoFinaldaEstrutura(int posicao)
     else
     {
         strAuxiliar = vetorPrincipal[posicao-1];
-        //printf("Valores dentro da estrutura:\n");
-        //printf("%d\n", strAuxiliar->conteudo);
         if(strAuxiliar->conteudo == 0)
             retorno = ESTRUTURA_AUXILIAR_VAZIA;
-        while(1)
-        {
-
-            if(strAuxiliar->prox != NULL)
-                strAuxiliar2 = strAuxiliar->prox;
-            else
-                break;
-            //printf("%d\n", strAuxiliar2->conteudo);
-            //printf("%d\n", strAuxiliar->conteudo);
-            if(strAuxiliar2->conteudo == 0)
+        else
+        {   
+            while(strAuxiliar != NULL)
             {
-                strAuxiliar->conteudo = 0;
-                break;
+                if(strAuxiliar->conteudo == 0)
+                    strAuxiliarAnterior->conteudo = 0;
+                strAuxiliarAnterior = strAuxiliar;
+                strAuxiliar = strAuxiliar->prox;
+                if(strAuxiliar == NULL)
+                    strAuxiliarAnterior->conteudo = 0;
             }
-            else if(strAuxiliar2->prox == NULL)
-            {   
-                //printf("%d\n", strAuxiliar2->conteudo);
-                strAuxiliar2->conteudo = 0;
-                //printf("Fim do laço.\n");
-                break;
-            }
-            strAuxiliar = strAuxiliar2;
         }
     }
     return retorno;
@@ -319,7 +296,8 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[])
     else if(vetorPrincipal[posicao - 1] == NULL)
         retorno = SEM_ESTRUTURA_AUXILIAR;
     else
-    {   i = -1;
+    {   
+        i = -1;
         strAuxiliar = vetorPrincipal[posicao - 1];
         i = passarConteudoParaArray(vetorAux, strAuxiliar);
         retorno = SUCESSO;
@@ -354,6 +332,17 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
     return retorno;
 }
 
+void copiarArray(int *vDestino, int *vCopia, int tamanho)
+{
+    int i;
+    int *v = vDestino;
+    for(i=0; i < tamanho; i++)
+    {
+        v = vCopia + i;
+        v++;
+    }
+}
+
 /*
 Objetivo: retorna os números de todas as estruturas auxiliares.
 os números devem ser armazenados em vetorAux
@@ -364,19 +353,15 @@ Rertono (int)
 */
 int getDadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
-    
-    int retorno = 0, i,j = 0;
+    int retorno = 0, i, j = 0;
     No *strAuxiliar;
     vetorAux[0] = 0;
     for(i=0; i < TAM; i++ ){
         strAuxiliar = vetorPrincipal[i];
         while(strAuxiliar != NULL && strAuxiliar->conteudo != 0)
         {
-            if(strAuxiliar->conteudo != 0)
-            {
-                vetorAux[j] = strAuxiliar->conteudo;
-                j++;
-            }
+            vetorAux[j] = strAuxiliar->conteudo;
+            j++;
             strAuxiliar = strAuxiliar->prox;
         }
     }
@@ -386,7 +371,9 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[])
         retorno =   TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
     }
     else
+    {
         retorno = SUCESSO;
+    }
     return retorno;
 }
 
@@ -402,20 +389,18 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
 
     int retorno = 0, i, j = 0;
-    No* strAuxiliar;
+    No *strAuxiliar;
     vetorAux[0] = 0;
     for(i=0; i < TAM; i++ ){
         strAuxiliar = vetorPrincipal[i];
         while(strAuxiliar != NULL && strAuxiliar->conteudo != 0)
         {
-            if(strAuxiliar->conteudo != 0)
-            {
-                vetorAux[j] = strAuxiliar->conteudo;
-                j++;
-            }
+            vetorAux[j] = strAuxiliar->conteudo;
+            j++;
             strAuxiliar = strAuxiliar->prox;
         }
     }
+    
     if(vetorAux[0] == 0)
     {
         retorno =   TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
@@ -423,12 +408,60 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
     else
     {
         retorno = SUCESSO;
-        if(j)
-            ordenarInteiros(vetorAux, j);
+        ordenarInteiros( vetorAux, j);
     }
     return retorno;
 }
 
+int verificarTamanhoEstruturaAuxiliar( No *strAuxiliar )
+{
+    int i = 0;
+    while (strAuxiliar != NULL){
+        i++;
+        strAuxiliar = strAuxiliar->prox;
+    }
+    return i;
+}
+
+void liberarEstrutura(No *str)
+{
+    No *aux;
+    while(str != NULL)
+    {
+        aux = str->prox;
+        free(str);
+        str = aux;
+    }
+}
+
+int substituirEstrutura(No *estr, int novoTamanho, int posicao)
+{
+    int i, j, *valoresAnteriores, tamanhoAtual, erro = 0;
+    No *cabeca;
+    for(i = 0; estr != NULL; i++)
+    {
+        //valoresAnteriores[i] = estr->conteudo;
+        estr = estr->prox;
+    }
+    tamanhoAtual = verificarTamanhoEstruturaAuxiliar(estr);
+    liberarEstrutura(estr);
+    for(i=0; i < novoTamanho; i++)
+    {
+        estr = malloc(sizeof(No*));
+        //estr->conteudo = valoresAnteriores[i];
+        if( i < novoTamanho - 1)
+        {
+            estr->prox = malloc(sizeof(No*));
+            estr = estr->prox;
+        }
+        else
+            estr->prox = NULL;
+        if(i == 0)
+            cabeca = estr;
+    }
+    vetorPrincipal[posicao] = cabeca;
+    return erro;
+}
 /*
 Objetivo: modificar o tamanho da estrutura auxiliar da posição 'posicao' para o novo tamanho 'novoTamanho' + tamanho atual
 Suponha o tamanho inicial = x, e novo tamanho = n. O tamanho resultante deve ser x + n. Sendo que x + n deve ser sempre >= 1
@@ -442,7 +475,54 @@ Rertono (int)
 int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho)
 {
 
-    int retorno = 0;
+    int retorno = 0, i, tamanhoAtual;
+    No *strAux;
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA )
+        retorno = POSICAO_INVALIDA;
+    else if( vetorPrincipal[posicao - 1] == NULL )
+        retorno = SEM_ESTRUTURA_AUXILIAR;    
+    else
+    {   
+        
+        strAux = vetorPrincipal[posicao - 1];
+        tamanhoAtual = verificarTamanhoEstruturaAuxiliar(strAux);
+        if(tamanhoAtual + novoTamanho < 1)
+            retorno = NOVO_TAMANHO_INVALIDO;
+        else
+            substituirEstrutura(strAux, tamanhoAtual + novoTamanho, posicao - 1);
+        /*
+        if(tamanhoAtual + novoTamanho < 1)
+            retorno = NOVO_TAMANHO_INVALIDO;
+        else
+        {
+            if(novoTamanho < 0)
+            {
+                strAux = realloc( strAux ,sizeof(No*) * (novoTamanho + tamanhoAtual));
+                if(!strAux)
+                {
+                    retorno = SEM_ESPACO_DE_MEMORIA;
+                }
+                else
+                {
+                    vetorPrincipal[posicao - 1] = strAux;
+                }
+            }
+            else
+            {
+                strAux = realloc( strAux ,sizeof(No*) * (novoTamanho + tamanhoAtual));
+                if(!strAux)
+                {
+                    retorno = SEM_ESPACO_DE_MEMORIA;
+                }
+                else
+                {
+                    vetorPrincipal[posicao -1] = strAux;
+                }
+            }
+        }*/
+    }
+    if(retorno == 0)
+        retorno = SUCESSO;
     return retorno;
 }
 
@@ -457,9 +537,26 @@ Retorno (int)
 int getQuantidadeElementosEstruturaAuxiliar(int posicao)
 {
 
-    int retorno = 0;
-
-    return retorno;
+    int retorno = 0, nElementos;
+    No *strAuxiliar;
+    
+    if( ehPosicaoValida(posicao) == POSICAO_INVALIDA)
+        retorno = POSICAO_INVALIDA;
+    else if(vetorPrincipal[posicao -1 ] == NULL)
+        retorno = ESTRUTURA_AUXILIAR_VAZIA;
+    else
+    {
+        strAuxiliar = vetorPrincipal[posicao -1];
+        for(nElementos=0; strAuxiliar != NULL && strAuxiliar->conteudo != 0; nElementos++)
+        {
+            strAuxiliar = strAuxiliar->prox;
+        }
+        if(nElementos == 0)
+            retorno =  ESTRUTURA_AUXILIAR_VAZIA;
+        else
+            retorno = nElementos;
+    }
+    return nElementos;
 }
 
 /*
@@ -506,7 +603,7 @@ Objetivo: inicializa o programa. deve ser chamado ao inicio do programa
 void inicializar()
 {
     int i;
-    for(i=1; i <= TAM; i++){
+    for(i=0; i < TAM; i++){
         vetorPrincipal[i] = NULL;
     }
 }
@@ -519,17 +616,10 @@ para poder liberar todos os espaços de memória das estruturas auxiliares.
 void finalizar()
 {
     int i;
-    No *estrAux, *estrAux2;
-    for(i=0; i > TAM; i++)
+    No *estrAux;
+    for(i=0; i < TAM; i++)
     {
         estrAux = vetorPrincipal[i];
-        while(1)
-        {
-            estrAux2 = estrAux->prox;
-            free(estrAux);
-            estrAux = estrAux2;
-            if(estrAux2->prox == NULL)
-                break;
-        }
+        liberarEstrutura(estrAux);
     }
 }
